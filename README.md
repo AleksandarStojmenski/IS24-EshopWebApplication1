@@ -1,1 +1,1 @@
-# EshopWebApplication2
+# Eshop web application with onion architecture - one service implemented
