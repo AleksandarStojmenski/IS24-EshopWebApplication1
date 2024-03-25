@@ -15,17 +15,21 @@ namespace Eshop.Service.Implementation
     {
         private readonly IRepository<ShoppingCart> _shoppingCartRepository;
         private readonly IRepository<Order> _orderRepository;
+        private readonly IRepository<EmailMessage> _mailRepository;
         private readonly IRepository<ProductsInOrders> _productInOrderRepository;
         private readonly IRepository<ProductsInShoppingCart> _productInShoppingCartRepository;
         private readonly IUserRepository _userRepository;
+        private readonly IEmailService _emailService;
 
-        public ShoppingCartService(IRepository<ShoppingCart> shoppingCartRepository, IUserRepository userRepository, IRepository<Order> orderRepository, IRepository<ProductsInOrders> productInOrderRepository, IRepository<ProductsInShoppingCart> productInShoppingCartRepository)
+        public ShoppingCartService(IRepository<ShoppingCart> shoppingCartRepository, IUserRepository userRepository, IRepository<Order> orderRepository, IRepository<ProductsInOrders> productInOrderRepository, IRepository<ProductsInShoppingCart> productInShoppingCartRepository, IRepository<EmailMessage> mailRepository, IEmailService emailService)
         {
             _shoppingCartRepository = shoppingCartRepository;
             _userRepository = userRepository;
             _orderRepository = orderRepository;
             _productInOrderRepository = productInOrderRepository;
             _productInShoppingCartRepository = productInShoppingCartRepository;
+            _mailRepository = mailRepository;
+            _emailService = emailService;
         }
 
 
@@ -88,6 +92,9 @@ namespace Eshop.Service.Implementation
                 var loggedInUser = this._userRepository.Get(userId);
                 var userCard = loggedInUser.UserCart;
 
+                EmailMessage message = new EmailMessage();
+                message.Subject = "Successfull order";
+                message.MailTo = loggedInUser.Email;
 
                 Order order = new Order
                 {
@@ -122,8 +129,7 @@ namespace Eshop.Service.Implementation
                 }
 
                 sb.AppendLine("Total price for your order: " + totalPrice.ToString());
-
-                //mail.Content = sb.ToString();
+                message.Content = sb.ToString();
 
 
                 productInOrders.AddRange(result);
@@ -136,8 +142,8 @@ namespace Eshop.Service.Implementation
                 loggedInUser.UserCart.ProductsInShoppingCarts.Clear();
 
                 this._userRepository.Update(loggedInUser);
-                //this._mailRepository.Insert(mail);
-
+                this._mailRepository.Insert(message);
+                this._emailService.SendEmailAsync(message);
                 return true;
             }
 

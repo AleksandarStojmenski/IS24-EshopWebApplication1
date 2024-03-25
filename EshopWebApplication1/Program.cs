@@ -27,13 +27,14 @@ builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 builder.Services.AddScoped(typeof(IUserRepository), typeof(UserRepository));
 
 
-//services.Configure<StripeSettings>(Configuration.GetSection("Stripe"));
+builder.Services.Configure<StripeSettings>(builder.Configuration.GetSection("Stripe"));
 
 
 builder.Services.AddTransient<IProductService, ProductService>();
 
 builder.Services.AddTransient<IShoppingCartService, ShoppingCartService>();
 
+builder.Services.AddScoped<IEmailService, EmailService>();
 
 
 var app = builder.Build();

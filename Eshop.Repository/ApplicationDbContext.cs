@@ -13,6 +13,7 @@ namespace EshopWebApplication1.Data
         public DbSet<ProductsInShoppingCart> ProductsInShoppingCarts { get; set; }
 
         public DbSet<ProductsInOrders> ProductsInOrders { get; set; }
+        public DbSet<EmailMessage> EmailMessages { get; set; }
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
     : base(options)
         { }

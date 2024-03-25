@@ -7,6 +7,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="MailKit" Version="4.4.0" />
+    <PackageReference Include="Stripe.net" Version="43.20.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Eshop.DomainEntities\Eshop.DomainEntities.csproj" />
     <ProjectReference Include="..\Eshop.Repository\Eshop.Repository.csproj" />
   </ItemGroup>
