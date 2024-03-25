@@ -8,6 +8,7 @@ using Eshop.Service.Interface;
 using EshopWebApplication1.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Stripe;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -27,10 +28,10 @@ builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 builder.Services.AddScoped(typeof(IUserRepository), typeof(UserRepository));
 
 
-//services.Configure<StripeSettings>(Configuration.GetSection("Stripe"));
+builder.Services.Configure<StripeSettings>(builder.Configuration.GetSection("Stripe"));
 
 
-builder.Services.AddTransient<IProductService, ProductService>();
+builder.Services.AddTransient<IProductService, Eshop.Service.Implementation.ProductService>();
 
 builder.Services.AddTransient<IShoppingCartService, ShoppingCartService>();
 
