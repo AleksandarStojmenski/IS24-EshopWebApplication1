@@ -15,10 +15,12 @@ namespace EshopWebApplication1.Controllers
     public class ProductsController : Controller
     {
         private readonly IProductService _productService;
+        private readonly IShoppingCartService _shoppingCartService;
 
-        public ProductsController(IProductService? productService)
+        public ProductsController(IProductService? productService, IShoppingCartService? shoppingCartService)
         {
             _productService = productService;
+            _shoppingCartService = shoppingCartService;
         }
 
         // GET: Products
@@ -60,7 +62,7 @@ namespace EshopWebApplication1.Controllers
         public async Task<IActionResult> AddToCartConfirmed(ProductsInShoppingCart model)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier) ?? "";
-            _productService.AddToShoppingConfirmed(model, userId);
+            _shoppingCartService.AddToShoppingConfirmed(model, userId);
             return View("Index", _productService.GetAllProducts());
         }
         public async Task<IActionResult> AddToCart(Guid? id)

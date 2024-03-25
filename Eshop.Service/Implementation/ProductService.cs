@@ -27,48 +27,6 @@ namespace Eshop.Service.Implementation
             _logger = logger;
         }
 
-        public bool AddToShoppingCart(Guid id,string userId)
-        {
-            try
-            {
-                var user = this._userRepository.Get(userId);
-                var shoppingCart = user.UserCart;
-                if (shoppingCart?.ProductsInShoppingCarts == null)
-                    shoppingCart.ProductsInShoppingCarts = new List<ProductsInShoppingCart>();
-                var product = _productRepository.Get(id);
-
-                return true;
-            }
-            catch (Exception ex) {
-                return false;
-            };
-
-        }
-
-        public bool AddToShoppingCart(Guid id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public bool AddToShoppingConfirmed(ProductsInShoppingCart model, string userId)
-        {
-            var user = this._userRepository.Get(userId);
-            var shoppingCart = user.UserCart;
-            ProductsInShoppingCart itemToAdd = new ProductsInShoppingCart
-            {
-                Id = Guid.NewGuid(),
-                Product = model.Product,
-                ProductId = model.ProductId,
-                ShoppingCart = shoppingCart,
-                ShoppingCartId = shoppingCart.Id,
-                Quantity = model.Quantity
-            };
-
-            this._productInShoppingCartRepository.Insert(itemToAdd);
-            return true;
-
-        }
-
         public void CreateNewProduct(Product p)
         {
 
@@ -90,21 +48,6 @@ namespace Eshop.Service.Implementation
         public Product GetDetailsForProduct(Guid? id)
         {
             return _productRepository.Get(id);
-        }
-
-        public ShoppingCartDto GetShoppingCartInfo(string id)
-        {
-
-            var user = this._userRepository.Get(id);
-            var shoppingCart = user.UserCart;
-
-            ShoppingCartDto model = new ShoppingCartDto()
-            {
-                ProductsInShoppingCarts = shoppingCart.ProductsInShoppingCarts?? new List<ProductsInShoppingCart>(),
-                TotalPrice = shoppingCart.ProductsInShoppingCarts.Sum(z => z.Quantity * z.Product.Price)
-                
-            };
-            return model;
         }
 
         public void UpdeteExistingProduct(Product p)

@@ -15,26 +15,26 @@ namespace EshopWebApplication1.Controllers
     public class ShoppingCartsController : Controller
     {
         private readonly ApplicationDbContext _context;
-        private readonly IProductService _shoppingCartService;
+        private readonly IShoppingCartService _shoppingCartService;
 
-        public ShoppingCartsController(IProductService? shoppingCartService)
+        public ShoppingCartsController(IShoppingCartService? shoppingCartService)
         {
             _shoppingCartService = shoppingCartService;
         }
         public IActionResult Index()
         {
+            
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-            return View(this._shoppingCartService.GetShoppingCartInfo(userId));
+            return View(this._shoppingCartService.getShoppingCartInfo(userId));
         }
 
-        public IActionResult DeleteFromShoppingCart(Guid id)
+        public IActionResult Delete(Guid id)
         {
 
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-            //var result = this._shoppingCartService.deleteProductFromSoppingCart(userId, id);
-            var result = true;
+            var result = this._shoppingCartService.deleteProductFromSoppingCart(userId, id);
             if (result)
             {
                 return RedirectToAction("Index", "ShoppingCarts");
@@ -49,49 +49,11 @@ namespace EshopWebApplication1.Controllers
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-            var result= new Order();// this._shoppingCartService.order(userId);
+            var result = this._shoppingCartService.order(userId);
 
-            return true;
+            return result;
         }
 
-        public IActionResult PayOrder(string stripeEmail, string stripeToken)
-        {
-            //var customerService = new CustomerService();
-            //var chargeService = new ChargeService();
-            //string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-
-            //var order = this._shoppingCartService.getShoppingCartInfo(userId);
-
-            //var customer = customerService.Create(new CustomerCreateOptions
-            //{
-            //    Email = stripeEmail,
-            //    Source = stripeToken
-            //});
-
-            //var charge = chargeService.Create(new ChargeCreateOptions
-            //{
-            //    Amount = (Convert.ToInt32(order.TotalPrice) * 100),
-            //    Description = "EShop Application Payment",
-            //    Currency = "usd",
-            //    Customer = customer.Id
-            //});
-
-            //if (charge.Status == "succeeded")
-            //{
-            //    var result = this.Order();
-
-            //    if (result)
-            //    {
-            //        return RedirectToAction("Index", "ShoppingCarts");
-            //    }
-            //    else
-            //    {
-            //        return RedirectToAction("Index", "ShoppingCarts");
-            //    }
-            //}
-
-            return RedirectToAction("Index", "ShoppingCard");
-        }
     }
 
    
