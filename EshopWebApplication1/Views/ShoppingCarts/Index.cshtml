@@ -1,0 +1,60 @@
+﻿@model Eshop.DomainEntities.ShoppingCartDto
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a style="color:red" asp-action="OrderNow">Order NOW</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                #
+            </th>
+            <th>
+                Product name
+            </th>
+            <th>
+                Price
+            </th>
+            <th>
+                Quantity
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @for (int i=0;i<Model.ProductsInShoppingCarts.Count();i++) {
+            var item = Model.ProductsInShoppingCarts[i];
+            <tr>
+            <td>@(i+1)</td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Product.Name)
+            </td>
+            
+                <td>@Html.DisplayFor(modelItem => item.Product.Price)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Quantity)
+                </td>
+            <td> |
+                <a asp-action="Delete" asp-controller="ShoppingCarts" asp-route-id="@item.Product.Id">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+    <tfoot>
+        <th><b>Total:</b></th>
+
+    <th></th>
+    <th></th>
+    <th></th>
+
+    <th><b>@Model.TotalPrice</b></th>
+
+    </tfoot>
+</table>
